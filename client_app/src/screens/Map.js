@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native'
 import MapView, {Marker} from 'react-native-maps';
 import { getRestaurants } from '../http/restaurantAPI'
 import { getUserData } from '../http/userAPI'
-
+import {Context} from "../../root";
 
 const Map = () => {
 
@@ -24,9 +24,9 @@ const Map = () => {
     }
 
     useEffect(() => {
-        handleCheckIn(user.info.person_id)
         getRestaurants()
         .then(data => setSpots(data))
+        .then(() => handleCheckIn(user.info.person_id))
         .finally(() => setLoading(false))
     }, [])
 

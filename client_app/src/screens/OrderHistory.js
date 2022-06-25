@@ -2,8 +2,7 @@ import React, {useState, useContext, useEffect} from 'react'
 import {Text, StyleSheet, View, FlatList, RefreshControl} from 'react-native';
 import HistoryOrderItem from '../components/HistoryOrderItem';
 import { getOrderHistoryClient } from '../http/orderAPI';
-import {  getRestaurant } from '../http/restaurantAPI';
-import {  getUserData } from '../http/userAPI';
+import { getUserData } from '../http/userAPI';
 import {Context} from "../../root";
 import {observer} from "mobx-react-lite";
 
@@ -16,28 +15,18 @@ const OrderHistory = observer(({navigation}) => {
 
     
     useEffect(() => {
-        handleCheckIn(user.info.person_id)
         getOrderHistoryClient(user.info.person_id)
         .then(data => setOrder(data))
+        .then(() => handleCheckIn(user.info.person_id))
         .finally(() => setLoading(false))
     }, [])
 
     const onRefresh = () => {
-        handleCheckIn(user.info.person_id)
         setRefreshing(true)
-        getOrderHistoryClient(user.info.person_id).then(data => setOrder(data))
+        getOrderHistoryClient(user.info.person_id)
+        .then(data => setOrder(data))
+        .then(() => handleCheckIn(user.info.person_id))
         .finally(() => setRefreshing(false))
-    }
-
-
-
-    const [name, setName] = useState()
-
-    const getName = (id) => {
-        getRestaurant(id)
-        .then(data => setName(data))
-
-        return(name)
     }
 
     const handleCheckIn = (id) => {

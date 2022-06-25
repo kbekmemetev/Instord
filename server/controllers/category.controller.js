@@ -13,7 +13,7 @@ class CategoryController{
     }
 
     async getAll(req, res){
-        const restaurant_id = req.params.id
+        const restaurant_id = req.params.restaurant_id
         const get_menu = (await db.query(`SELECT * FROM menu WHERE (restaurant_id) = $1;`, [restaurant_id])).rows
         const categories = await db.query(`SELECT * FROM category WHERE menu_id = $1`, [get_menu[0]['menu_id']])
         return res.json(categories.rows)
@@ -23,14 +23,14 @@ class CategoryController{
         const restaurant_id = req.params.restaurant_id
         const get_menu = (await db.query(`SELECT * FROM menu WHERE (restaurant_id) = $1;`, [restaurant_id])).rows
         const categories = await db.query(`SELECT * FROM category WHERE menu_id = $1 and parent = $2`, [get_menu[0]['menu_id'], 0])
-
         return res.json(categories.rows)
     }
 
     async getCategoryByParent(req, res){
+        console.log('!!!!')
         const parent_id = req.params.parent_id
         const categories = await db.query(`SELECT * FROM category WHERE parent = $1`, [parent_id])
-    
+        console.log(categories.rows)
         return res.json(categories.rows)
     }
 

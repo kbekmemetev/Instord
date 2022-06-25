@@ -3,12 +3,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 const $host = axios.create({
-    baseURL: 'http://192.168.0.102:8000/'
+    baseURL: 'http://192.168.0.101:8000/'
 })
 
 
 const $authHost = axios.create({
-    baseURL: 'http://192.168.0.102:8000/'
+    baseURL: 'http://192.168.0.101:8000/'
 })
 
 const authInterceptor = config => {

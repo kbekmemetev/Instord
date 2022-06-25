@@ -44,7 +44,7 @@ const OrderHistory = observer(({navigation}) => {
             <Text>Loading</Text>
           </View>
         )
-      }
+    }
 
     return (
 
@@ -56,18 +56,11 @@ const OrderHistory = observer(({navigation}) => {
             keyExtractor={(item) => item.order_id}
             refreshControl = {
                 <RefreshControl
-                refreshing = {refreshing}
-                onRefresh = {onRefresh}
-            />}
+                    refreshing = {refreshing}
+                    onRefresh = {onRefresh}
+                />}
             renderItem={({item}) => (
-
-                <HistoryOrderItem 
-                orderID = {item.order_id}
-                orderTime = {item.time.split(' ')[1]}
-                orderTotal = {item.total}
-                orderClientEmail = {getName(item.person_id)}
-                />
-
+                <HistoryOrderItem order = {item} />
             )}/>
 
         </View>

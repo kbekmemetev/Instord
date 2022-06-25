@@ -16,6 +16,11 @@ export const getRootCategories = async (restaurant_id) => {
     return data
 }
 
+export const getCategoryByParent = async (parent_id) => {
+    const {data} = await $host.get('api/category/getCategoryByParent/' + parent_id)
+    return data
+}
+
 export const updateCategory = async (name, parent, id) => {
     const {data} = await $host.put('api/category/', {name, parent, id})
     return data
@@ -25,6 +30,3 @@ export const deleteCategory = async (id) => {
     const {data} = await $host.delete('api/category/' + id)
     return data
 }
-
-
-

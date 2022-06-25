@@ -4,7 +4,7 @@ import { deleteDish } from '../http/itemAPI'
 
 const Dish = ({navigation, route}) => {
 
-    const passDish = route.params
+    const dish = route.params
     const handleDelete = (id) => {
         deleteDish(id)
         navigation.navigate('MenuConstructor')
@@ -13,24 +13,24 @@ const Dish = ({navigation, route}) => {
     return (
         <View style={styles.body} >
             <View style={styles.imageContainer} >
-                <Image resizeMode={'contain'} style={styles.image}  source={{uri: 'http://192.168.0.102:8000/' + route.params.image}} />
+                <Image resizeMode={'contain'} style={styles.image}  source={{uri: 'http://192.168.0.101:8000/' + dish.image}} />
             </View>
             <View style={styles.mainContainer} >
-                <Text style={styles.title} > {route.params.name} </Text>
-                { route.params.is_liquid ? <Text style = {styles.description}>{route.params.weight} мл</Text> : <Text style = {styles.description}>{route.params.weight} гр</Text>} 
-                { route.params.description ? <Text style={styles.description} > {route.params.description} </Text> : null}
-                { route.params.composition ? <Text style={styles.description} > {route.params.composition} </Text> : null}
+                <Text style={styles.title} > {dish.name} </Text>
+                { dish.is_liquid ? <Text style = {styles.description}>{dish.weight} мл</Text> : <Text style = {styles.description}>{dish.weight} гр</Text>} 
+                { dish.description ? <Text style={styles.description} > {dish.description} </Text> : null}
+                { dish.composition ? <Text style={styles.description} > {dish.composition} </Text> : null}
             </View>
 
 
             <View style={styles.bottomButtons}>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('EditDish', passDish)} style={styles.button}>
+                    <TouchableOpacity onPress={() => navigation.navigate('EditDish', dish)} style={styles.button}>
                         <Text style={styles.buttonText}>Изменить</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => {handleDelete(route.params.id)}} style={styles.deleteButton}>
+                    <TouchableOpacity onPress={() => {handleDelete(dish.item_id)}} style={styles.deleteButton}>
                         <Text style={styles.buttonText}>Удалить</Text>
                     </TouchableOpacity>
                 </View>

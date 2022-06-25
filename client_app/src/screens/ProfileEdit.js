@@ -15,8 +15,9 @@ const EditProfile = observer(({navigation}) => {
     const [email, setEmail] = useState(' ');
 
     useEffect(() => {
-        handleCheckIn(user.info.person_id)
-        getUserData(user.info.person_id).then(data => setEmail(data.email))
+        getUserData(user.info.person_id)
+        .then(data => setEmail(data.email))
+        .then(() => handleCheckIn(user.info.person_id))
         .finally(() => setLoading(false))
     }, [])
 

@@ -5,7 +5,7 @@ const categoryController = require('../controllers/category.controller')
 router.post('/', categoryController.create)
 router.get('/getall/:restaurant_id', categoryController.getAll)
 router.get('/getRootCategories/:restaurant_id/', categoryController.getRootCategories)
-router.get('/getbyparent/:parent_id', categoryController.getCategoryByParent)
+router.get('/getCategoryByParent/:parent_id', categoryController.getCategoryByParent)
 router.put('/', categoryController.update)
 router.delete('/:id', categoryController.delete)
 

@@ -22,8 +22,8 @@ class restaurantController{
     }
 
     async update(req, res){
-        const {id, name, hours} = req.body
-        const restaurant = await db.query(`UPDATE restaurant SET name = $1, work_hours = $2 WHERE restaurant_id = $3`, [name, hours, id])
+        const {restaurant_id, name, hours} = req.body
+        const restaurant = await db.query(`UPDATE restaurant SET name = $1, work_hours = $2 WHERE restaurant_id = $3`, [name, hours, restaurant_id])
         return res.json(restaurant.rows[0])
     }
     

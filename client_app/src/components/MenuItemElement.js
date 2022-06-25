@@ -9,7 +9,7 @@ const MenuItemElement = ({link, itemInfo}) => {
 
     return (
         <TouchableOpacity style = {styles.menuItem} onPress={() => navigation.navigate('MenuItem', itemInfo)}>
-            <Image source={{uri: 'http://192.168.0.102:8000/' + itemInfo.image}} style = {styles.itemImage} />
+            <Image source={{uri: 'http://192.168.0.101:8000/' + itemInfo.image}} style = {styles.itemImage} />
             <View style = {styles.itemTextContainer}>
                 <Text style = {styles.itemTitle}>{itemInfo.name}</Text>
                 <Text style = {styles.itemPrice}>{itemInfo.price}₽</Text>

@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, FlatList, RefreshControl  } from 'react-native'
 import { getOrderByID, getOrderItemsByOrderID } from '../http/orderAPI';
 import { getRestaurant } from '../http/restaurantAPI'
 import {  getUserData } from '../http/userAPI';
+import {Context} from "../../root";
 import {observer} from "mobx-react-lite";
 import OrderPosition from '../components/OrderPosition';
 
@@ -15,19 +16,22 @@ const Order = observer(({navigation, route}) => {
     const {user} = useContext(Context)
 
     useEffect(() => {
-        handleCheckIn(user.info.person_id)
-        getOrderByID(route.params).then(data => setOrder(data))
-        .then(getOrderItemsByOrderID(route.params).then(data => setOrderItem(data)))
+        getOrderByID(route.params)
+        .then(data => setOrder(data))
+        .then(getOrderItemsByOrderID(route.params)
+        .then(data => setOrderItem(data)))
+        .then(console.log(order, orderItem))
         .then(getName())
+        .then(handleCheckIn(user.info.person_id))
         .finally(() => setLoading(false))
     }, [])
 
     const onRefresh = () => {
         setRefreshing(true)
-        handleCheckIn(user.info.person_id)
         getOrderByID(route.params).then(data => setOrder(data))
         .then(getOrderItemsByOrderID(route.params).then(data => setOrderItem(data)))
         .then(getName())
+        .then(handleCheckIn(user.info.person_id))
         .finally(() => setRefreshing(false))
     }
 
@@ -49,15 +53,13 @@ const Order = observer(({navigation, route}) => {
         })   
     }
 
-
     if (loading) {
         return (
           <View style={styles.loading}>
             <Text>Loading</Text>
           </View>
         )
-      }
-
+    }
 
     return (
         <View style={styles.container}>
@@ -89,7 +91,7 @@ const Order = observer(({navigation, route}) => {
             
             <View style={styles.orderTotal}>
                 <View style={styles.orderName}>
-                    <Text style={{fontSize: 18, fontWeight: 'bold'}}>ИТОГО - {order.total}₽</Text>
+                    <Text style={{fontSize: 18, fontWeight: 'bold'}}>ИТОГО - {order.total_price}₽</Text>
                 </View>
             </View> 
 

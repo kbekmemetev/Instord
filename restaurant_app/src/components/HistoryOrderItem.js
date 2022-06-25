@@ -1,23 +1,40 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
+import { getUserData } from '../http/userAPI'
 import {observer} from "mobx-react-lite";
 
 
-const HistoryOrderItem = observer(({orderID, orderTotal, orderClientEmail, orderTime}) => {
+const HistoryOrderItem = observer(({order}) => {
 
     const navigation = useNavigation();
 
+    const [loading, setLoading] = useState(true)
+    const [email, setEmail] = useState()
+
+    useEffect(() => {
+        getUserData(order.person_id)
+        .then(data => setEmail(data.email))
+        .finally(() => setLoading(false))
+        .catch(error => console.log('Error:', error))
+    }, [])
+
+    if (loading) {
+        return (
+          <View style={styles.loading}>
+            <Text>Loading</Text>
+          </View>
+        )
+    }
+
     return (
-    
-        <TouchableOpacity  style={styles.order} onPress={() => navigation.navigate('Order', orderID)}>
+        <TouchableOpacity  style={styles.order} onPress={() => navigation.navigate('Order', order.order_id)}>
             <View style={styles.orderName}>
-                <Text style={{fontSize: 18}}>{orderClientEmail}</Text>
+                <Text style={{fontSize: 18}}>{email}</Text>
             </View>
             <View style={styles.orderName}>
-                <Text style={styles.orderDate}>{orderTime}</Text>
-                <Text style={styles.orderSum}>{orderTotal}₽</Text>
+                <Text style={styles.orderDate}>{order.time}</Text>
+                <Text style={styles.orderSum}>{order.total_price}₽</Text>
             </View>
         </TouchableOpacity>
     );

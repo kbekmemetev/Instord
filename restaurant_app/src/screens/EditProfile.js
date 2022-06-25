@@ -20,10 +20,11 @@ const EditProfile = observer(({navigation}) => {
     useEffect(() => {
         getUserData(user.info.person_id)
         .then(data => setEmail(data.email))
-        .then(getRestaurantData(user.info.person_id)
-        .then(data => setRestaurantName(data.name))) 
-        .then(getRestaurantData(user.info.person_id)
-        .then(data => setHours(data.work_hours))) 
+        .then(getRestaurantData(user.info.person_id))
+        .then(data => {
+            setRestaurantName(data.name)
+            setHours(data.work_hours)
+        })
         .finally(() => setLoading(false))
     }, [])
 
@@ -39,12 +40,10 @@ const EditProfile = observer(({navigation}) => {
 
         <Formik
             initialValues={{name: ''}}
-            onSubmit={ async (values) => {
-        
+            onSubmit={ async () => {
                 updateUserData(user.info.person_id, email)
                 updateRestaurantData(user.info.person_id, restaurantName, hours)
                 navigation.navigate('Settings')
-
             }}
       >
       { (props) => (

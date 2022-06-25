@@ -16,7 +16,7 @@ const MenuItem = observer(({navigation, route}) => {
     return (
         <View style={styles.body} >
             <View style={styles.imageContainer} >
-                <Image resizeMode={'contain'} style={styles.image}  source={{uri: 'http://192.168.0.102:8000/' + route.params.image}} />
+                <Image resizeMode={'contain'} style={styles.image}  source={{uri: 'http://192.168.0.101:8000/' + route.params.image}} />
             </View>
             <View style={styles.mainContainer} >
                 <Text style={styles.title} > {route.params.name} </Text>

@@ -3,17 +3,17 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
 
-const MenuItemElement = ({link, itemPrice, itemImg, itemWeight, itemLiquid, itemName, itemPass}) => {
+const MenuItemElement = ({itemData}) => {
 
     const navigation = useNavigation();
 
     return (
-        <TouchableOpacity style = {styles.menuItem} onPress={() => navigation.navigate('Dish', itemPass)}>
-            <Image source={{uri: 'http://192.168.0.102:8000/' + itemImg}} style = {styles.itemImage} />
+        <TouchableOpacity style = {styles.menuItem} onPress={() => navigation.navigate('Dish', itemData)}>
+            <Image source={{uri: 'http://192.168.0.101:8000/' + itemData.image}} style = {styles.itemImage} />
             <View style = {styles.itemTextContainer}>
-                <Text style = {styles.itemTitle}>{itemName}</Text>
-                <Text style = {styles.itemPrice}>{itemPrice}₽</Text>
-                { itemLiquid ? <Text style = {styles.itemWeight}>{itemWeight} мл</Text> : <Text style = {styles.itemWeight}>{itemWeight} гр</Text>} 
+                <Text style = {styles.itemTitle}>{itemData.name}</Text>
+                <Text style = {styles.itemPrice}>{itemData.price}₽</Text>
+                { itemData.is_liquid ? <Text style = {styles.itemWeight}>{itemData.weight} мл</Text> : <Text style = {styles.itemWeight}>{itemData.weight} гр</Text>} 
             </View>
         </TouchableOpacity>
     )

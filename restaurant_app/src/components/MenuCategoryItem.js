@@ -1,37 +1,27 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, { useEffect, useState} from 'react'
 import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView, FlatList } from 'react-native'
 import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
 import MenuItemElement from './MenuItemElement';
 import { useNavigation } from '@react-navigation/native';
-import { deleteCategory, getCategoriesWhere } from '../http/categoryAPI';
+import { deleteCategory, getCategoryByParent } from '../http/categoryAPI';
 import { getDishes } from '../http/itemAPI';
-import {Context} from "../../root";
 import {observer} from "mobx-react-lite";
 
 
-const MenuCategoryItem = observer(({link, catName, catParent, catId, catInfo}) => {
+const MenuCategoryItem = observer(({categoryInfo}) => {
 
     const navigation = useNavigation();
-
-    const {user} = useContext(Context)
     const [category, setCategory] = useState()
     const [dishes, setDishes] = useState()
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        getCategoriesWhere(user.info.person_id, catId).then(data => setCategory(data))
-        getDishes(catId).then(data => setDishes(data))
+        getCategoryByParent(categoryInfo.category_id)
+        .then(data => setCategory(data))
+        getDishes(categoryInfo.category_id)
+        .then(data => setDishes(data))
+        .then(console.log(category, dishes))
         .finally(() => setLoading(false))
-    }, [])
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            getCategoriesWhere(user.info.person_id, catId).then(data => setCategory(data))
-            getDishes(catId).then(data => setDishes(data))
-        }, 1000);
-        return () => {
-          clearInterval(interval);
-        };
     }, [])
 
     if (loading) {
@@ -46,15 +36,15 @@ const MenuCategoryItem = observer(({link, catName, catParent, catId, catInfo}) =
         <ScrollView style={{width: '100%'}}>
         <Collapse style = {styles.collapse}>
                 <CollapseHeader style = {styles.categoryTitleContainer}>
-                    <Text style={styles.categoryTitle}>{catName}</Text>
+                    <Text style={styles.categoryTitle}>{categoryInfo.name}</Text>
                     <View style={styles.categoryIconElement}>
-                        <TouchableOpacity style={styles.categoryIconHolder} onPress={() => navigation.navigate('EditCategory', catInfo)}>
+                        <TouchableOpacity style={styles.categoryIconHolder} onPress={() => navigation.navigate('EditCategory', categoryInfo)}>
                             <Image style={styles.categoryIcon} source={require('../assets/edit.png')} />
                         </TouchableOpacity>
                         <TouchableOpacity
                         style={styles.categoryIconHolder}
                         onPress={() => {
-                            let data = deleteCategory(catId)
+                            let data = deleteCategory(categoryInfo.category_id)
                             navigation.navigate('MenuConstructor')
                         }}  
                         >
@@ -72,7 +62,7 @@ const MenuCategoryItem = observer(({link, catName, catParent, catId, catInfo}) =
                         data = {category}
                         renderItem={({item}) => (
 
-                            <MenuCategoryItem catName={item.name} catId={item.category_id} catInfo={item} />
+                            <MenuCategoryItem categoryInfo={item} />
 
                         )}
                     />
@@ -84,16 +74,7 @@ const MenuCategoryItem = observer(({link, catName, catParent, catId, catInfo}) =
                         keyExtractor={(item) => item.item_id}
                         data = {dishes}
                         renderItem={({item}) => (
-
-                            
-                            <MenuItemElement 
-                                itemPrice={item.price} 
-                                itemImg={item.image} 
-                                itemWeight={item.weight} 
-                                itemLiquid={item.is_liquid} 
-                                itemName={item.name}
-                                itemPass={item} />
-
+                            <MenuItemElement itemData = {item} />
                         )}
                     />
 

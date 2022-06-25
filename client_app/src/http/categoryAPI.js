@@ -6,6 +6,6 @@ export const getRootCategories = async (restaurant_id) => {
 }
 
 export const getCategoriesByParent = async (parent_id) => {
-    const {data} = await $host.get('api/category/getbyparent/' + parent_id)
+    const {data} = await $host.get('api/category/getCategoryByParent/' + parent_id)
     return data
 }

@@ -31,7 +31,7 @@ const BasketItem = ({basket_item}) => {
     return (
         <View style={styles.menuItem} >
         <View style={styles.imageContainer} > 
-            <Image style={styles.image}  source={{uri: 'http://192.168.0.102:8000/' + data.image}} />
+            <Image style={styles.image}  source={{uri: 'http://192.168.0.101:8000/' + data.image}} />
         </View>
         <View style={styles.rowContainer}>
             <View style={styles.row}>  

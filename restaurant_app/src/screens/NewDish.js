@@ -12,7 +12,7 @@ import * as ImagePicker from 'expo-image-picker';
 const NewDish = observer(({navigation}) => {
 
   const {user} = useContext(Context)
-  const [category, setCategory] = useState()
+  const [category, setCategory] = useState([])
   const [loading, setLoading] = useState(true)
   const [uri, setUri] = useState(true)
   const [imageType, setImageType] = useState(true)
