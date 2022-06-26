@@ -27,10 +27,8 @@ class CategoryController{
     }
 
     async getCategoryByParent(req, res){
-        console.log('!!!!')
         const parent_id = req.params.parent_id
         const categories = await db.query(`SELECT * FROM category WHERE parent = $1`, [parent_id])
-        console.log(categories.rows)
         return res.json(categories.rows)
     }
 

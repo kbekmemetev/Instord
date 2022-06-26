@@ -15,9 +15,10 @@ import {Context} from "../../root";
 const RestaurantSignUp = observer(({ navigation }) => {
   
   const {user} = useContext(Context)
+  console.log(process.env.DADATA_TOKEN, process.env.DADATA_SECRET_KEY)
   var url = "https://cleaner.dadata.ru/api/v1/clean/address";
-  var token = "128ec73ce5d5cf912639b8c01edf59547ec647fa";
-  var secret = "d2d22541783a972aeba93a4e9918bdeadc68086c";
+  var token = process.env.DADATA_TOKEN;
+  var secret = process.env.DADATA_SECRET_KEY;
 
 
   return (
