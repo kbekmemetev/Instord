@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState} from 'react'
-import { Text, View, StyleSheet, FlatList, RefreshControl  } from 'react-native';
+import { Text, View, StyleSheet, FlatList  } from 'react-native';
 import { getOrderByID, getOrderItemsByOrderID } from '../http/orderAPI';
 import { getRestaurant } from '../http/restaurantAPI'
-import {  getUserData } from '../http/userAPI';
+import { getUserData } from '../http/userAPI';
 import {Context} from "../../root";
 import {observer} from "mobx-react-lite";
 import OrderPosition from '../components/OrderPosition';
@@ -10,37 +10,25 @@ import OrderPosition from '../components/OrderPosition';
 const Order = observer(({navigation, route}) => {
 
     const [loading, setLoading] = useState(true)
-    const [refreshing, setRefreshing] = useState(false)
     const [order, setOrder] = useState()
     const [orderItem, setOrderItem] = useState()
     const {user} = useContext(Context)
+    const [name, setName] = useState()
 
     useEffect(() => {
         getOrderByID(route.params)
-        .then(data => setOrder(data))
-        .then(getOrderItemsByOrderID(route.params)
+        .then(data => {
+            setOrder(data)
+            getRestaurant(data.restaurant_id)
+            .then((data) => setName(data.name))
+        })
+        .then(() => getOrderItemsByOrderID(route.params)
         .then(data => setOrderItem(data)))
-        .then(console.log(order, orderItem))
-        .then(getName())
         .then(handleCheckIn(user.info.person_id))
         .finally(() => setLoading(false))
     }, [])
 
-    const onRefresh = () => {
-        setRefreshing(true)
-        getOrderByID(route.params).then(data => setOrder(data))
-        .then(getOrderItemsByOrderID(route.params).then(data => setOrderItem(data)))
-        .then(getName())
-        .then(handleCheckIn(user.info.person_id))
-        .finally(() => setRefreshing(false))
-    }
-
-    const [name, setName] = useState()
-
-    const getName = () => {
-        getRestaurant(order.restaurant_id)
-        .then(data => setName(data.name))
-    }
+    
 
     const handleCheckIn = (id) => {
         getUserData(id)
@@ -69,7 +57,7 @@ const Order = observer(({navigation, route}) => {
                     <Text style={{fontSize: 18}}>{name}</Text>
                 </View>
                 <View style={styles.orderName}>
-                    <Text style={{fontSize: 18}}>{order.time.split(' ')[1]}</Text>
+                    <Text style={{fontSize: 18}}>{order.time}</Text>
                 </View>
             </View>
 
@@ -77,12 +65,6 @@ const Order = observer(({navigation, route}) => {
             data = {orderItem}
             style={{width: '100%'}} 
             keyExtractor={(item) => item.oi_id}
-            refreshControl = {
-                <RefreshControl
-                    refreshing = {refreshing}
-                    onRefresh = {onRefresh}
-                />}
-
             renderItem={({item}) => (
                 <OrderPosition itemID = {item.item_id} />
             )}/>

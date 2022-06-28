@@ -89,6 +89,7 @@ class OrderController{
     }
 
     async getOrderByID(req, res){
+        console.log(req.params)
         const id = req.params.id
         const order = (await db.query ('SELECT * FROM orders WHERE order_id = $1', [id])).rows
         return res.json(order[0])

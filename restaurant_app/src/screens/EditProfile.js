@@ -20,7 +20,7 @@ const EditProfile = observer(({navigation}) => {
     useEffect(() => {
         getUserData(user.info.person_id)
         .then(data => setEmail(data.email))
-        .then(getRestaurantData(user.info.person_id))
+        .then(() => getRestaurantData(user.info.person_id))
         .then(data => {
             setRestaurantName(data.name)
             setHours(data.work_hours)

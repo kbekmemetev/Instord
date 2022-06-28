@@ -7,8 +7,8 @@ export const createRestaurant = async (id, name, coordinates, address, hours) =>
     return data
 }
 
-export const getRestaurantData = async (restauranr_id) => {
-    const {data} = await $host.get('api/restaurant/' + restauranr_id)
+export const getRestaurantData = async (restaurant_id) => {
+    const {data} = await $host.get('api/restaurant/' + restaurant_id)
     return data
 }
 

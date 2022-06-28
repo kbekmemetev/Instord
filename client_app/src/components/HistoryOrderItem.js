@@ -6,7 +6,7 @@ import { getRestaurant } from '../http/restaurantAPI';
 import {observer} from "mobx-react-lite";
 
 
-const HistoryOrderItem = observer(({orderID, orderTotal, orderRestaurantName, orderTime, order}) => {
+const HistoryOrderItem = observer(({order}) => {
 
     const navigation = useNavigation();
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react'
-import { Text, View, StyleSheet, FlatList, RefreshControl  } from 'react-native';
+import { Text, View, StyleSheet, FlatList } from 'react-native';
 import { getOrderByID, getOrderItemsByOrderID } from '../http/orderAPI';
 import { getUserData } from '../http/userAPI'
 import {observer} from "mobx-react-lite";
@@ -8,9 +8,23 @@ import OrderPosition from '../components/OrderPosition';
 const Order = observer(({navigation, route}) => {
 
     const [loading, setLoading] = useState(true)
-    const [refreshing, setRefreshing] = useState(false)
+    const [name, setName] = useState()
     const [order, setOrder] = useState()
     const [orderItem, setOrderItem] = useState()
+
+    useEffect(() => {
+        getOrderByID(route.params)
+        .then(data => {
+            console.log(data)
+            setOrder(data)
+            getUserData(data.person_id)
+            .then((data) => setName(data.email))
+        })
+        .then(() => getOrderItemsByOrderID(route.params)
+        .then(data => setOrderItem(data)))
+        .finally(() => setLoading(false))
+
+    }, [])
 
     if (loading) {
         return (
@@ -19,42 +33,7 @@ const Order = observer(({navigation, route}) => {
           </View>
         )
     }
-
-    useEffect(() => {
-        getOrderByID(route.params)
-        .then(data => setOrder(data))
-        .then(getOrderItemsByOrderID(route.params)
-        .then(data => setOrderItem(data)))
-        .then(getName())
-        .finally(() => setLoading(false))
-        .catch(error => console.log('Error:', error))
-
-    }, [])
-
-    const onRefresh = () => {
-        setRefreshing(true)
-        getOrderByID(route.params).then(data => setOrder(data))
-        .then(getOrderItemsByOrderID(route.params).then(data => setOrderItem(data)))
-        .then(getName())
-        .finally(() => setRefreshing(false))
-        .catch(error => console.log('Error:', error))
-
-    }
-
-    const [name, setName] = useState()
-
-    const getName = () => {
-
-        try {
-            getUserData(order.person_id)
-            .then(data => setName(data.email))
-        } catch (error) {
-            console.log(error)
-        }
-
-        return(name)
-    }
-
+    
     return (
         <View style={styles.container}>
 
@@ -63,7 +42,7 @@ const Order = observer(({navigation, route}) => {
                     <Text style={{fontSize: 18}}>{name}</Text>
                 </View>
                 <View style={styles.orderName}>
-                    <Text style={{fontSize: 18}}>{order.time.split(' ')[1]}</Text>
+                    <Text style={{fontSize: 18}}>{order.time}</Text>
                 </View>
             </View>
 
@@ -71,11 +50,6 @@ const Order = observer(({navigation, route}) => {
             data = {orderItem}
             style={{width: '100%'}} 
             keyExtractor={(item) => item.oi_id}
-            refreshControl = {
-                <RefreshControl
-                refreshing = {refreshing}
-                onRefresh = {onRefresh}
-            />}
             renderItem={({item}) => (
 
             <OrderPosition itemID = {item.item_id} />
@@ -86,7 +60,7 @@ const Order = observer(({navigation, route}) => {
             
             <View style={styles.orderTotal}>
                 <View style={styles.orderName}>
-                    <Text style={{fontSize: 18, fontWeight: 'bold'}}>ИТОГО - {order.total}₽</Text>
+                    <Text style={{fontSize: 18, fontWeight: 'bold'}}>ИТОГО - {order.total_price}₽</Text>
                 </View>
             </View> 
         </View>

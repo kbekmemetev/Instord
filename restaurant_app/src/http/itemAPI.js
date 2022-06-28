@@ -18,7 +18,9 @@ export const getDish = async (id) => {
 }
 
 export const updateDish = async (item) => {
-    const {data} = await $host.put('api/item/', item)
+    console.log(item)
+    const {data} = await $host.put('api/item/', item, {
+        headers: { 'Content-Type': 'multipart/form-data'}})
     return data
 }
 

@@ -1,4 +1,3 @@
-require('dotenv').config();
 import React, {useContext} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider} from 'react-native-safe-area-context';

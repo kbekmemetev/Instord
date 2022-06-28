@@ -20,7 +20,6 @@ const MenuCategoryItem = observer(({categoryInfo}) => {
         .then(data => setCategory(data))
         getDishes(categoryInfo.category_id)
         .then(data => setDishes(data))
-        .then(console.log(category, dishes))
         .finally(() => setLoading(false))
     }, [])
 

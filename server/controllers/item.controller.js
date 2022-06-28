@@ -5,7 +5,6 @@ const ApiError = require('../error/ApiError');
 
 class ItemController{
     async create(req, res, next) {
-        console.log(req.body)
         let {name, category, weight, isLiquid, price, allowedUnderaged, description, composition} = req.body
         const {image} = req.files
         let fileName = uuid.v4() + ".jpeg"

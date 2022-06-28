@@ -1,3 +1,4 @@
+import {DADATA_TOKEN, DADATA_SECRET_KEY} from '@env'
 import React, { useContext } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Text } from 'react-native-paper'

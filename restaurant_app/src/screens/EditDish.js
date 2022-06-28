@@ -6,6 +6,7 @@ import { updateDish } from '../http/itemAPI';
 import {observer} from "mobx-react-lite";
 import {Context} from "../../root";
 import {Picker} from '@react-native-picker/picker';
+import * as ImagePicker from 'expo-image-picker';
 
 const EditDish = observer(({navigation, route}) => {
 
@@ -41,7 +42,6 @@ const EditDish = observer(({navigation, route}) => {
     // Infer the type of the image
     let match = /\.(\w+)$/.exec(filename);
     let type = match ? `image/${match[1]}` : `image`;
-    console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri)
@@ -64,8 +64,8 @@ const EditDish = observer(({navigation, route}) => {
   // Previous values
 
   const [name, setName] = useState(route.params.name)
-  const [weight, setWeight] = useState(route.params.weight)
-  const [price, setPrice] = useState(route.params.price)
+  const [weight, setWeight] = useState(route.params.weight.toString())
+  const [price, setPrice] = useState(route.params.price.toString())
   const [description, setDescription] = useState(route.params.description)
   const [composition, setComposition] = useState(route.params.composition)
 
@@ -86,7 +86,6 @@ const EditDish = observer(({navigation, route}) => {
       <Formik
       initialValues={{name: '', weight: '', price: '', description: '', composition: ''}}
       onSubmit={ async (values) => {
-        
         const data = new FormData();
         data.append('id', route.params.item_id)
         data.append('name', name)
@@ -97,7 +96,10 @@ const EditDish = observer(({navigation, route}) => {
         data.append('allowedUnderaged', allowedUnderaged)
         data.append('description', description)
         data.append('composition', composition)
-        data.append('image', { uri: uri, name: fileName, imageType })
+        if (image) {
+          data.append('image', { uri: uri, name: fileName, imageType })
+        }
+        
         
         updateDish(data)
         navigation.navigate('MenuConstructor')
